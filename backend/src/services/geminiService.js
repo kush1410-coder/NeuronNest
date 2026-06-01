@@ -181,27 +181,26 @@ exports.generateStory = async (
     language = "English"
 ) => {
     const prompt = `
-You are an expert children's storyteller.
-
-Child Age: ${age}
-Current Emotion: ${emotion}
-Topic: ${topic}
-Learning Level: ${learningLevel}
-Story Language: ${language}
+You are an expert children's storyteller and child development coach.
+Generate a captivating, age-appropriate story for a child based on these settings:
+- **Child's Age**: ${age} years old (ensure vocabulary, sentence structure, and story complexity are perfect for this age)
+- **Current Emotion/Mood**: ${emotion} (the story should gently address, match, or help guide this emotion in a positive way)
+- **Story Theme/Topic**: ${topic}
+- **Learning Level/Complexity**: ${learningLevel} (beginner: simple short sentences; intermediate: engaging story with some new words; advanced: richer vocabulary and descriptive plot)
+- **Language**: ${language} (write the entire story, including lessons/takeaways, in this language. If Hindi, use Devanagari script)
 
 Requirements:
-- Write the entire story in the specified language (if Hindi, write it in Hindi using standard Devanagari script).
-- Personalize the story for the emotion.
-- Teach one educational lesson.
-- Keep vocabulary suitable for the age.
-- End with a positive takeaway.
+1. Make it a fun, engaging, and imaginative story.
+2. Weave in an educational/moral lesson naturally related to the theme.
+3. End with a clear and inspiring "Takeaway: [message]" sentence for the child.
+4. Do not include any introduction, formatting labels, or excessive markdown like '**' (keep punctuation clean for text-to-speech engines).
 `;
 
     try {
         const result = await model.generateContent(prompt);
         return result.response.text();
     } catch (apiError) {
-        console.warn("Gemini API call failed (likely quota limit 429). Using high-quality local fallback story generator...", apiError.message);
+        console.warn("Gemini API call failed. Using local fallback story generator...", apiError.message);
         
         const langKey = (language && language.toLowerCase() === "hindi") ? "hindi" : "english";
         const emotionKey = (emotion && emotion.toLowerCase()) || "default";
