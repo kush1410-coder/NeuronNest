@@ -394,127 +394,221 @@ export default function StoryPage() {
 
         </div>
 
-        <div className="grid lg:grid-cols-[380px_1fr] gap-10 mt-14">
+        <div className="grid lg:grid-cols-[450px_1fr] gap-10 mt-14">
 
           {/* Left Panel */}
-          <div className="bg-white/30 backdrop-blur-2xl rounded-[40px] p-8 shadow-2xl border border-white/40">
-
-            <h2 className="text-3xl font-black mb-8">
-              🪄 Story Settings
-            </h2>
-
-            <div className="space-y-5">
-
-              <div>
-                <label className="font-bold">Age</label>
-                <input
-                  type="number"
-                  value={form.age}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      age: e.target.value,
-                    })
-                  }
-                  className="w-full mt-2 p-4 rounded-2xl shadow-md"
-                />
+          <div className="bg-white/40 backdrop-blur-2xl rounded-[40px] p-8 shadow-2xl border border-white/50 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-6">
+                <span className="text-3xl animate-bounce">🪄</span>
+                <h2 className="text-3xl font-black text-purple-950">
+                  Story Settings
+                </h2>
               </div>
 
-              <div>
-                <label className="font-bold">Emotion</label>
+              <div className="space-y-6">
 
-                <select
-                  value={form.emotion}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      emotion: e.target.value,
-                    })
-                  }
-                  className="w-full mt-2 p-4 rounded-2xl shadow-md"
-                >
-                  <option>happy</option>
-                  <option>excited</option>
-                  <option>curious</option>
-                  <option>calm</option>
-                </select>
+                {/* Age Group Selector */}
+                <div>
+                  <label className="text-sm font-black text-purple-900 block mb-2">Age Group</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { ageVal: 4, label: "3-4 yrs", emoji: "🐣" },
+                      { ageVal: 6, label: "5-6 yrs", emoji: "🦊" },
+                      { ageVal: 7, label: "7+ yrs", emoji: "🦁" }
+                    ].map((item) => {
+                      const isSelected = Number(form.age) === item.ageVal || (item.ageVal === 7 && Number(form.age) >= 7) || (item.ageVal === 4 && Number(form.age) <= 4);
+                      return (
+                        <button
+                          key={item.label}
+                          type="button"
+                          onClick={() => setForm({ ...form, age: item.ageVal })}
+                          className={`p-3 rounded-2xl flex flex-col items-center justify-center border-2 transition-all duration-300 cursor-pointer ${
+                            isSelected
+                              ? "bg-purple-600 border-purple-600 text-white shadow-lg scale-105"
+                              : "bg-white/70 border-purple-100 text-purple-950 hover:bg-white hover:border-purple-200"
+                          }`}
+                        >
+                          <span className="text-2xl mb-1">{item.emoji}</span>
+                          <span className="text-xs font-black">{item.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Emotion Grid */}
+                <div>
+                  <label className="text-sm font-black text-purple-900 block mb-2">Child's Emotion</label>
+                  <div className="grid grid-cols-4 gap-1.5">
+                    {[
+                      { val: "happy", emoji: "😊" },
+                      { val: "excited", emoji: "🤩" },
+                      { val: "curious", emoji: "🤓" },
+                      { val: "calm", emoji: "😌" },
+                      { val: "sad", emoji: "😢" },
+                      { val: "angry", emoji: "😠" },
+                      { val: "silly", emoji: "🤪" },
+                      { val: "bored", emoji: "😑" },
+                      { val: "sleepy", emoji: "😴" },
+                      { val: "surprised", emoji: "😮" },
+                      { val: "proud", emoji: "😎" }
+                    ].map((item) => {
+                      const isSelected = form.emotion.toLowerCase() === item.val;
+                      return (
+                        <button
+                          key={item.val}
+                          type="button"
+                          onClick={() => setForm({ ...form, emotion: item.val })}
+                          className={`py-2 px-1 rounded-xl flex flex-col items-center justify-center border transition-all duration-200 cursor-pointer ${
+                            isSelected
+                              ? "bg-pink-500 border-pink-500 text-white shadow-md scale-105 font-bold"
+                              : "bg-white/60 border-pink-100 text-purple-950 hover:bg-white text-xs"
+                          }`}
+                        >
+                          <span className="text-lg mb-0.5">{item.emoji}</span>
+                          <span className="text-[10px] capitalize font-extrabold">{item.val}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Topic Selector */}
+                <div>
+                  <label className="text-sm font-black text-purple-900 block mb-2">Story Theme</label>
+                  <div className="grid grid-cols-3 gap-2 mb-3">
+                    {[
+                      { val: "animals", label: "Animals 🦁" },
+                      { val: "space", label: "Space 🚀" },
+                      { val: "magic", label: "Magic 🪄" },
+                      { val: "dinosaurs", label: "Dinosaurs 🦖" },
+                      { val: "ocean", label: "Ocean 🌊" },
+                      { val: "science", label: "Science 🧪" }
+                    ].map((item) => {
+                      const isSelected = form.topic.toLowerCase() === item.val;
+                      return (
+                        <button
+                          key={item.val}
+                          type="button"
+                          onClick={() => setForm({ ...form, topic: item.val })}
+                          className={`p-2.5 rounded-xl border text-xs font-black transition-all duration-200 cursor-pointer text-center ${
+                            isSelected
+                              ? "bg-amber-500 border-amber-500 text-white shadow-md scale-105"
+                              : "bg-white/60 border-amber-100 text-purple-950 hover:bg-white"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="✍️ Or type a custom adventure..."
+                    value={["animals", "space", "magic", "dinosaurs", "ocean", "science"].includes(form.topic.toLowerCase()) ? "" : form.topic}
+                    onChange={(e) => setForm({ ...form, topic: e.target.value || "animals" })}
+                    className="w-full px-4 py-2.5 rounded-xl bg-white/80 border border-purple-200 text-purple-950 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 placeholder:text-purple-400/70"
+                  />
+                </div>
+
+                {/* Difficulty / Learning Level Selector */}
+                <div>
+                  <label className="text-sm font-black text-purple-900 block mb-2">Learning Level</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { val: "beginner", label: "Beginner", desc: "🌱 Simple text" },
+                      { val: "intermediate", label: "Mid", desc: "🌿 Fun tales" },
+                      { val: "advanced", label: "Advanced", desc: "🌳 Rich words" }
+                    ].map((item) => {
+                      const isSelected = form.learningLevel.toLowerCase() === item.val;
+                      return (
+                        <button
+                          key={item.val}
+                          type="button"
+                          onClick={() => setForm({ ...form, learningLevel: item.val })}
+                          className={`p-2.5 rounded-xl border flex flex-col items-center transition-all duration-200 cursor-pointer ${
+                            isSelected
+                              ? "bg-emerald-600 border-emerald-600 text-white shadow-md scale-105"
+                              : "bg-white/60 border-emerald-100 text-purple-950 hover:bg-white"
+                          }`}
+                        >
+                          <span className="text-xs font-black">{item.label}</span>
+                          <span className="text-[9px] mt-0.5 opacity-90">{item.desc}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Story Language */}
+                <div>
+                  <label className="text-sm font-black text-purple-900 block mb-2">Language</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { val: "english", label: "English 🇬🇧" },
+                      { val: "hindi", label: "Hindi 🇮🇳" }
+                    ].map((item) => {
+                      const isSelected = form.language.toLowerCase() === item.val;
+                      return (
+                        <button
+                          key={item.val}
+                          type="button"
+                          onClick={() => setForm({ ...form, language: item.val })}
+                          className={`p-3 rounded-2xl border font-bold transition-all duration-200 cursor-pointer text-center ${
+                            isSelected
+                              ? "bg-blue-600 border-blue-600 text-white shadow-md scale-105"
+                              : "bg-white/60 border-blue-100 text-purple-950 hover:bg-white"
+                          }`}
+                        >
+                          {item.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
               </div>
-
-              <div>
-                <label className="font-bold">Topic</label>
-
-                <input
-                  value={form.topic}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      topic: e.target.value,
-                    })
-                  }
-                  className="w-full mt-2 p-4 rounded-2xl shadow-md"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold">Difficulty</label>
-
-                <select
-                  value={form.learningLevel}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      learningLevel: e.target.value,
-                    })
-                  }
-                  className="w-full mt-2 p-4 rounded-2xl shadow-md"
-                >
-                  <option>beginner</option>
-                  <option>intermediate</option>
-                  <option>advanced</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="font-bold">Story Language</label>
-
-                <select
-                  value={form.language}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      language: e.target.value,
-                    })
-                  }
-                  className="w-full mt-2 p-4 rounded-2xl shadow-md"
-                >
-                  <option value="english">English 🇬🇧</option>
-                  <option value="hindi">Hindi 🇮🇳</option>
-                </select>
-              </div>
-
-              <button
-                onClick={() => generateStory()}
-                className="
-                  w-full
-                  py-5
-                  rounded-3xl
-                  text-white
-                  text-xl
-                  font-black
-                  bg-gradient-to-r
-                  from-purple-600
-                  to-pink-500
-                  shadow-xl
-                  hover:scale-105
-                  transition
-                "
-              >
-                {loading
-                  ? "✨ Creating Story..."
-                  : "📖 Generate Story"}
-              </button>
-
             </div>
+
+            <button
+              onClick={() => generateStory()}
+              className="
+                w-full
+                py-4
+                mt-6
+                rounded-3xl
+                text-white
+                text-lg
+                font-black
+                bg-gradient-to-r
+                from-purple-600
+                via-pink-500
+                to-amber-500
+                shadow-xl
+                hover:scale-[1.03]
+                active:scale-95
+                transition-all
+                duration-300
+                cursor-pointer
+                flex
+                items-center
+                justify-center
+                gap-2
+              "
+            >
+              {loading ? (
+                <>
+                  <span className="animate-spin text-xl">✨</span>
+                  <span>Weaving Magic...</span>
+                </>
+              ) : (
+                <>
+                  <span>📖</span>
+                  <span>Create Adventure Story</span>
+                </>
+              )}
+            </button>
           </div>
 
           {/* Story Book */}
