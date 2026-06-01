@@ -154,7 +154,27 @@ export default function AdventureMap() {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = 0.95;
-      utterance.pitch = 1.1;
+      utterance.pitch = 1.35; // Slightly higher pitch for a young girl voice tone
+
+      // Get available voices and find Indian English female voice
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Target Indian Female voice names or language en-IN
+        const indianFemaleVoice = voices.find(v => 
+          (v.lang === "en-IN" || v.lang.includes("en_IN")) &&
+          (v.name.toLowerCase().includes("female") || 
+           v.name.toLowerCase().includes("heera") || 
+           v.name.toLowerCase().includes("priya") || 
+           v.name.toLowerCase().includes("veena") || 
+           v.name.toLowerCase().includes("rhea") || 
+           v.name.toLowerCase().includes("google"))
+        ) || voices.find(v => v.lang === "en-IN" || v.lang.includes("en_IN"));
+
+        if (indianFemaleVoice) {
+          utterance.voice = indianFemaleVoice;
+        }
+      }
       window.speechSynthesis.speak(utterance);
     } catch (e) {
       console.warn("Speech synthesis error:", e);
