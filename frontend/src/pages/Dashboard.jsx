@@ -345,7 +345,7 @@ useEffect(() => {
                   playSound('rocket');
                   triggerConfetti(e);
                   setTimeout(() => {
-                    navigate("/games");
+                    navigate("/adventure");
                   }, 400);
                 }}
                 whileHover={{ 

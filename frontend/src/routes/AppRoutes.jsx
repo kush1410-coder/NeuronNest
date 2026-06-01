@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
+import AdventureMap from "../pages/AdventureMap";
 import StoryPage from "../pages/StoryPage";
 import ChildHome from "../pages/ChildHome";
 import Children from "../pages/Children";
@@ -30,6 +31,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/adventure" element={<AdventureMap />} />
         <Route path="/story" element={<StoryPage />} />
         <Route path="/games" element={<GamesPage />} />
         <Route path="/rewards" element={<RewardsPage />} />
