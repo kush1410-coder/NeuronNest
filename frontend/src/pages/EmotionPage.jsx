@@ -250,18 +250,59 @@ export default function EmotionPage() {
     try {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
       const child = JSON.parse(localStorage.getItem("activeChild") || "{}");
-      const targetId = child._id || user.id || user._id;
-      if (targetId) {
+      const targetId = child._id || user.id || user._id || "default_guest";
+      
+      // Load local history first for immediate responsiveness
+      const localLogs = JSON.parse(localStorage.getItem(`mood_history_${targetId}`) || "[]");
+      if (localLogs.length > 0) {
+        setMoodHistory(localLogs);
+        setSelectedMood(localLogs[0].emotion);
+      }
+
+      if (targetId && targetId !== "default_guest") {
         const res = await API.get(`/emotion/history/${targetId}`);
-        if (res.data) {
+        if (res.data && res.data.length > 0) {
           setMoodHistory(res.data);
-          if (res.data.length > 0) {
-            setSelectedMood(res.data[0].emotion);
-          }
+          setSelectedMood(res.data[0].emotion);
+          // Sync to localStorage
+          localStorage.setItem(`mood_history_${targetId}`, JSON.stringify(res.data));
         }
       }
     } catch (e) {
       console.warn("Failed to fetch mood history:", e);
+    }
+  };
+
+  const saveMoodLog = async (emotionVal) => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const child = JSON.parse(localStorage.getItem("activeChild") || "{}");
+    const targetId = child._id || user.id || user._id || "default_guest";
+    
+    // Construct local mock log entry
+    const newLog = {
+      _id: `local_${Date.now()}`,
+      userId: targetId,
+      emotion: emotionVal,
+      createdAt: new Date().toISOString()
+    };
+    
+    // Save locally first
+    const localLogs = JSON.parse(localStorage.getItem(`mood_history_${targetId}`) || "[]");
+    const updatedLogs = [newLog, ...localLogs].slice(0, 20);
+    localStorage.setItem(`mood_history_${targetId}`, JSON.stringify(updatedLogs));
+    setMoodHistory(updatedLogs);
+    setSelectedMood(emotionVal);
+
+    // Try posting to DB asynchronously
+    try {
+      if (targetId && targetId !== "default_guest") {
+        await API.post("/emotion/save", {
+          userId: targetId,
+          emotion: emotionVal,
+        });
+      }
+    } catch (err) {
+      console.warn("Failed to save mood log to backend database:", err);
     }
   };
 
@@ -397,21 +438,8 @@ export default function EmotionPage() {
         setSelectedMood(mappedEmotion);
         setDetectedEmotionMsg(`Detected: ${mappedEmotion.toUpperCase()}! ✨`);
 
-        // Attempt to auto-save mood history
-        try {
-          const user = JSON.parse(localStorage.getItem("user") || "{}");
-          const child = JSON.parse(localStorage.getItem("activeChild") || "{}");
-          const targetId = child._id || user.id || user._id;
-          if (targetId) {
-            await API.post("/emotion/save", {
-              userId: targetId,
-              emotion: mappedEmotion,
-            });
-            fetchHistory();
-          }
-        } catch (saveErr) {
-          console.warn("Failed to auto-save mood history:", saveErr);
-        }
+        // Save mood history locally and sync with backend
+        saveMoodLog(mappedEmotion);
       } else {
         setDetectedEmotionMsg("⚠️ Face not detected! Make sure your face is clearly inside the camera frame and well-lit.");
       }
@@ -506,22 +534,8 @@ export default function EmotionPage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={async () => {
-                      setSelectedMood(mood.value);
                       setDetectedEmotionMsg(null);
-                      try {
-                        const user = JSON.parse(localStorage.getItem("user") || "{}");
-                        const child = JSON.parse(localStorage.getItem("activeChild") || "{}");
-                        const targetId = child._id || user.id || user._id;
-                        if (targetId) {
-                          await API.post("/emotion/save", {
-                            userId: targetId,
-                            emotion: mood.value,
-                          });
-                          fetchHistory();
-                        }
-                      } catch (saveErr) {
-                        console.warn("Failed to auto-save manual mood selection:", saveErr);
-                      }
+                      saveMoodLog(mood.value);
                     }}
                     className={`
                       p-3
