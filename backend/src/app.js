@@ -27,9 +27,26 @@ app.use(
 );
 
 // Middlewares
-app.use(cors());
+const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:3000",
+    process.env.FRONTEND_URL,
+].filter(Boolean);
 
-app.use(helmet());
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (e.g., mobile apps, curl, Postman)
+        if (!origin) return callback(null, true);
+        // Allow any Vercel subdomain or custom domain
+        if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+            return callback(null, true);
+        }
+        return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+}));
+
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
 
 app.use(morgan("dev"));
 
