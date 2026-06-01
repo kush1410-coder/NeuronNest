@@ -81,8 +81,16 @@ export default function AdventureMap() {
   const [showParentDashboard, setShowParentDashboard] = useState(false);
 
   // Child Config/Input Profile
+  const activeChild = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("activeChild") || "{}");
+    } catch (e) {
+      return {};
+    }
+  })();
+
   const [profile, setProfile] = useState({
-    childName: "Emma",
+    childName: activeChild.name || "Yash",
     age: 8,
     favoriteTopic: "Space",
     learningGoal: "Mathematics"
@@ -558,7 +566,7 @@ export default function AdventureMap() {
                   <label className="block text-sm font-black uppercase tracking-wider text-purple-900/70 mb-1">Age</label>
                   <input 
                     type="number" 
-                    value={profile.childName}
+                    value={profile.age}
                     onChange={(e) => setProfile({ ...profile, age: parseInt(e.target.value) || 8 })}
                     className="w-full bg-white/80 border-2 border-purple-200 px-5 py-3 rounded-2xl font-bold focus:outline-none focus:border-purple-500 text-lg"
                   />
