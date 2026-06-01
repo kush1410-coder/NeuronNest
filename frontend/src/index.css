@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* CLOUDS */
+
+.cloud {
+  z-index: 1;
+}
+
+.cloud1 {
+  top: 80px;
+  left: -250px;
+  animation: drift1 60s linear infinite;
+}
+
+.cloud2 {
+  top: 220px;
+  left: -300px;
+  animation: drift2 40s linear infinite;
+}
+
+.cloud3 {
+  top: 450px;
+  left: -400px;
+  animation: drift3 70s linear infinite;
+}
+
+.cloud4 {
+  top: 130px;
+  left: -150px;
+  animation: drift4 50s linear infinite;
+}
+
+@keyframes drift1 {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 600px)); }
+}
+
+@keyframes drift2 {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 700px)); }
+}
+
+@keyframes drift3 {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 800px)); }
+}
+
+@keyframes drift4 {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(100vw + 500px)); }
+}
+
+/* PARTICLES */
+
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: floatParticle linear infinite;
+}
+
+@keyframes floatParticle {
+  from {
+    transform: translateY(100vh) scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.6;
+  }
+
+  to {
+    transform: translateY(-100px) scale(1);
+    opacity: 0;
+  }
+}
+.cloud {
+  position: absolute;
+  pointer-events: none;
+}
+
+.cloud1 {
+  animation: floatCloud1 50s linear infinite;
+}
+
+.cloud2 {
+  animation: floatCloud2 70s linear infinite;
+}
+
+@keyframes floatCloud1 {
+  from {
+    transform: translateX(-250px);
+  }
+  to {
+    transform: translateX(calc(100vw + 300px));
+  }
+}
+
+@keyframes floatCloud2 {
+  from {
+    transform: translateX(300px);
+  }
+  to {
+    transform: translateX(calc(-100vw - 400px));
+  }
+}
