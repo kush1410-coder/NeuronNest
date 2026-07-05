@@ -4,7 +4,7 @@
   "description": "SahAI monorepo containing backend and frontend for Vercel deployment",
   "private": true,
   "scripts": {
-    "build": "npm run build --prefix frontend"
+    "build": "cd frontend && npm install && npm run build"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
