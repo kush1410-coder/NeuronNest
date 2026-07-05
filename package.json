@@ -1,6 +1,6 @@
 {
   "name": "sahai-monorepo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SahAI monorepo containing backend and frontend for Vercel deployment",
   "private": true,
   "dependencies": {
