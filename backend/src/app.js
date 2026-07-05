@@ -10,10 +10,12 @@ const analyticsRoutes =require("./routes/analyticsRoutes");
 const storyRoutes = require("./routes/storyRoutes");
 const recommendationRoutes =require("./routes/recommendationRoutes");
 const dashboardRoutes =require("./routes/dashboardRoutes");
-
-// Routes
 const authRoutes = require("./routes/authRoutes");
 const childRoutes = require("./routes/childRoutes");
+
+// Database Connection
+const connectDB = require("./config/db");
+connectDB();
 
 const app = express();
 
